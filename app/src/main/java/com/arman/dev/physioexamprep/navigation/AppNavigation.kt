@@ -1,6 +1,8 @@
 package com.arman.dev.physioexamprep.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +21,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.arman.dev.physioexamprep.R
 import com.arman.dev.physioexamprep.core.ui.theme.appBackGround
 import com.arman.dev.physioexamprep.core.ui.theme.cardColor
+import com.arman.dev.physioexamprep.feature.module.presentation.ModuleScreen
+import com.arman.dev.physioexamprep.feature.module.presentation.component.ModuleTopBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigationHost(
     navController: NavHostController,
@@ -28,21 +34,38 @@ fun AppNavigationHost(
     val currentRoute = navBackStackEntry?.destination?.route
 
     val showBottomBar = currentRoute in listOf(
-        NavigationRoute.HomeScreen.route ,
+        NavigationRoute.ModuleScreen.route ,
         NavigationRoute.PYQScreen.route
     )
 
     Scaffold (
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         containerColor = appBackGround,
+        topBar = {
+            when(currentRoute){
+                NavigationRoute.ModuleScreen.route -> {
+                    ModuleTopBar(
+                        title = stringResource(R.string.app_title) ,
+                        navigationIcon = R.drawable.physio_exam_icon
+                    )
+                }
+                NavigationRoute.PYQScreen.route -> {
+
+                }
+            }
+
+        },
         bottomBar = {
             if (showBottomBar){
                 AppBottomBar(
                     currentRoute = currentRoute,
                     onNavigate = {route ->
                         navController.navigate(route) {
-                            popUpTo(navController.graph.startDestinationId)
+                            popUpTo(navController.graph.startDestinationId) {
+                                saveState = true
+                            }
                             launchSingleTop = true
+                            restoreState = true
                         }
                     }
                 )
@@ -50,12 +73,14 @@ fun AppNavigationHost(
         }
     ){paddingValues ->
         NavHost(
-            startDestination = NavigationRoute.HomeScreen.route ,
+            startDestination = NavigationRoute.ModuleScreen.route ,
             navController = navController ,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
-            composable(route = NavigationRoute.HomeScreen.route){
+            composable(route = NavigationRoute.ModuleScreen.route){
+                ModuleScreen {
 
+                }
             }
             composable(route = NavigationRoute.PYQScreen.route){
 
@@ -76,8 +101,8 @@ fun AppBottomBar(
     ){
 
         NavigationBarItem(
-            selected = currentRoute == NavigationRoute.HomeScreen.route,
-            onClick = { onNavigate(NavigationRoute.HomeScreen.route) },
+            selected = currentRoute == NavigationRoute.ModuleScreen.route,
+            onClick = { onNavigate(NavigationRoute.ModuleScreen.route) },
             icon = { Icon(painterResource(R.drawable.module),
                 null ,
                 tint = MaterialTheme.colorScheme.primary) },

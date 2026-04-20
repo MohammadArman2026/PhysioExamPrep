@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PhysioExamPrep</string>
+    <string name="app_title">Physio Exam Prep</string>
 </resources>
