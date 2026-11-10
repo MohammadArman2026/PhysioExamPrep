@@ -2,17 +2,24 @@ package com.arman.dev.physioexamprep.navigation
 
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.arman.dev.physioexamprep.core.ui.components.PhysioExamPrepBottomBar
+import com.arman.dev.physioexamprep.feature.home.ui.HomeScreen
+import com.arman.dev.physioexamprep.feature.learn.ui.LearnScreen
+import com.arman.dev.physioexamprep.feature.mocks.ui.MockScreen
+import com.arman.dev.physioexamprep.feature.pyq.ui.PYQScreen
+import com.arman.dev.physioexamprep.feature.user.ui.UserScreen
 
 @Composable
 fun PhysioExamPrepNavHost(
@@ -26,7 +33,27 @@ fun PhysioExamPrepNavHost(
         bottomBar = {
             if (shouldShowBottomBar(currentDestinationId)){
                 PhysioExamPrepBottomBar(
-                  currentTabId = currentDestinationId
+                    modifier = Modifier.navigationBarsPadding().padding(bottom = 4.dp),
+                  currentTabId = currentDestinationId,
+                    onTabClick = {
+                        when(it){
+                            1->navController.navigate(Routes.Home.route){
+                                launchSingleTop = true
+                            }
+                            2->navController.navigate(Routes.Learn.route){
+                                launchSingleTop = true
+                            }
+                            3->navController.navigate(Routes.PYQs.route){
+                                launchSingleTop = true
+                            }
+                            4->navController.navigate(Routes.Mock.route){
+                                launchSingleTop = true
+                            }
+                            5->navController.navigate(Routes.User.route){
+                                launchSingleTop = true
+                            }
+                        }
+                    }
                 )
             }
         }
@@ -39,31 +66,31 @@ fun PhysioExamPrepNavHost(
             composable(
                 route = Routes.Home.route
             ){
-
+                HomeScreen()
             }
 
             composable(
-                route = Routes.Home.route
+                route = Routes.Learn.route
             ){
-
+                LearnScreen()
             }
 
             composable(
-                route = Routes.Home.route
+                route = Routes.PYQs.route
             ){
-
+                PYQScreen()
             }
 
             composable(
-                route = Routes.Home.route
+                route = Routes.Mock.route
             ){
-
+                MockScreen()
             }
 
             composable(
-                route = Routes.Home.route
+                route = Routes.User.route
             ){
-
+                UserScreen()
             }
         }
     }

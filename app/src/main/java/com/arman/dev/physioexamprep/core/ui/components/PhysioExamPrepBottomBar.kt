@@ -1,6 +1,7 @@
 package com.arman.dev.physioexamprep.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,11 +28,13 @@ import com.arman.dev.physioexamprep.core.util.providePhysioExamPrepTabs
 @Composable
 fun PhysioExamPrepBottomBar(modifier:Modifier = Modifier,
                             tabs:List<PhysioExamPrepTabs> = providePhysioExamPrepTabs(),
-                            currentTabId :Int = 1
+                            currentTabId :Int = 1,
+                            onTabClick :(Int)-> Unit
 ){
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(32.dp))
             .background(Ink, RoundedCornerShape(32.dp)),
         contentAlignment = Alignment.Center
@@ -43,8 +46,10 @@ fun PhysioExamPrepBottomBar(modifier:Modifier = Modifier,
         ) {
             tabs.forEach {tab ->
                 BottomBarIcon(
+                    modifier = Modifier,
                     isSelected = tab.id == currentTabId,
-                    tab = tab
+                    tab = tab,
+                    onClick = onTabClick
                 )
             }
         }
@@ -54,17 +59,19 @@ fun PhysioExamPrepBottomBar(modifier:Modifier = Modifier,
 @Composable
 fun BottomBarIcon(
     modifier: Modifier = Modifier,
-    isSelected :Boolean = true,
-    tab : PhysioExamPrepTabs = PhysioExamPrepTabs()
+    isSelected: Boolean = true,
+    tab: PhysioExamPrepTabs = PhysioExamPrepTabs(),
+    onClick: (Int) -> Unit
 ){
-
     Box(
         modifier = modifier.then(
             if (isSelected) modifier
                 .clip(RoundedCornerShape(24.dp))
                 .background(Lime,
                     RoundedCornerShape(24.dp)) else modifier
-        ),
+        ).clickable{
+            onClick(tab.id)
+        },
         contentAlignment = Alignment.Center
     ){
         Row(
@@ -92,5 +99,9 @@ fun BottomBarIcon(
 @Composable
 @Preview(showBackground = true)
 private fun Preview(){
-    PhysioExamPrepBottomBar()
+    PhysioExamPrepBottomBar(
+        onTabClick = {
+
+        }
+    )
 }
