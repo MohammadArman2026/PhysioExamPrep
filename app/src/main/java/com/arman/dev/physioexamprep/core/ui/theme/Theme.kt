@@ -6,20 +6,38 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 
+// Pulse colour scheme (Figma "PhysioPrep — Fresh Concept").
+// Ink is the primary colour (dark buttons, nav bar), Lime is the accent (main CTA).
 private val customColorScheme = lightColorScheme(
-    primary = iconColor,
-    secondary = iconBackGround,
-    tertiary = descriptionColor,
+    primary = Ink,
+    onPrimary = White,
+    primaryContainer = Ink2,
+    onPrimaryContainer = White,
 
-    background = appBackGround,
-    surface = cardColor,
+    secondary = Lime,
+    onSecondary = Ink,
+    secondaryContainer = LimeSoft,
+    onSecondaryContainer = LimeDeep,
 
-    onPrimary = cardColor,
-    onSecondary = titleColor,
-    onTertiary = cardColor,
+    tertiary = Coral,
+    onTertiary = White,
+    tertiaryContainer = CoralSoft,
+    onTertiaryContainer = Ink,
 
-    onBackground = titleColor,
-    onSurface = titleColor
+    background = AppCanvas,
+    onBackground = TextPrimary,
+    surface = CardSurface,
+    onSurface = TextPrimary,
+    surfaceVariant = SurfaceMuted,
+    onSurfaceVariant = TextSecondary,
+
+    outline = Line,
+    outlineVariant = Line,
+
+    error = Danger,
+    onError = White,
+    errorContainer = DangerSoft,
+    onErrorContainer = Danger,
 )
 
 
