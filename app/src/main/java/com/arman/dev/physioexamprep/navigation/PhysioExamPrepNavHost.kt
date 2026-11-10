@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,23 +36,15 @@ fun PhysioExamPrepNavHost(
                 PhysioExamPrepBottomBar(
                     modifier = Modifier.navigationBarsPadding().padding(bottom = 4.dp),
                   currentTabId = currentDestinationId,
-                    onTabClick = {
-                        when(it){
-                            1->navController.navigate(Routes.Home.route){
-                                launchSingleTop = true
+                    onTabClick = { tabId ->
+                        val route = resolveRouteByDestinationId(tabId) ?: return@PhysioExamPrepBottomBar
+                        if (route == backStackEntry?.destination?.route) return@PhysioExamPrepBottomBar
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
                             }
-                            2->navController.navigate(Routes.Learn.route){
-                                launchSingleTop = true
-                            }
-                            3->navController.navigate(Routes.PYQs.route){
-                                launchSingleTop = true
-                            }
-                            4->navController.navigate(Routes.Mock.route){
-                                launchSingleTop = true
-                            }
-                            5->navController.navigate(Routes.User.route){
-                                launchSingleTop = true
-                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     }
                 )
@@ -72,7 +65,11 @@ fun PhysioExamPrepNavHost(
             composable(
                 route = Routes.Learn.route
             ){
-                LearnScreen()
+                LearnScreen(
+                   onSubjectClick = {
+
+                   }
+                )
             }
 
             composable(
@@ -105,6 +102,17 @@ fun resolveDestinationIdByRoute(routes: String? = "Home"): Int{
         Routes.User.route->5
          else -> 6
      }
+}
+
+fun resolveRouteByDestinationId(id: Int): String? {
+    return when (id) {
+        1 -> Routes.Home.route
+        2 -> Routes.Learn.route
+        3 -> Routes.PYQs.route
+        4 -> Routes.Mock.route
+        5 -> Routes.User.route
+        else -> null
+    }
 }
 
 fun shouldShowBottomBar(id:Int = 1) = id in  1..5
