@@ -20,6 +20,7 @@ import com.arman.dev.physioexamprep.feature.home.ui.HomeScreen
 import com.arman.dev.physioexamprep.feature.learn.ui.LearnScreen
 import com.arman.dev.physioexamprep.feature.mocks.ui.MockScreen
 import com.arman.dev.physioexamprep.feature.pyq.ui.PYQScreen
+import com.arman.dev.physioexamprep.feature.topiclist.ui.TopicListScreen
 import com.arman.dev.physioexamprep.feature.user.ui.UserScreen
 
 @Composable
@@ -67,7 +68,7 @@ fun PhysioExamPrepNavHost(
             ){
                 LearnScreen(
                    onSubjectClick = {
-
+                       navController.navigate(Routes.Topics.route)
                    }
                 )
             }
@@ -88,6 +89,14 @@ fun PhysioExamPrepNavHost(
                 route = Routes.User.route
             ){
                 UserScreen()
+            }
+
+            composable(Routes.Topics.route){
+                TopicListScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }

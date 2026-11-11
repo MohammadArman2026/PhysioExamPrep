@@ -41,6 +41,11 @@ android {
     }
 }
 
+// Export Room schema JSON (app/schemas/) so future versions can be migrated safely.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -87,4 +92,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    /**
+     * testing: coroutines for Room DAO/repository instrumented tests
+     */
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

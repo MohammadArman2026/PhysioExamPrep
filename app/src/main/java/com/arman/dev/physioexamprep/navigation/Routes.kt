@@ -8,4 +8,5 @@ sealed class Routes(val route: String) {
 
     data object PYQs : Routes("PYQs")
     data object User : Routes("User")
+    data object Topics : Routes("Topics")
 }
