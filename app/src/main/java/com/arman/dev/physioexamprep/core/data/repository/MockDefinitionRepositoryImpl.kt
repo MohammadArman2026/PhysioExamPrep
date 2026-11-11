@@ -9,8 +9,6 @@ import com.arman.dev.physioexamprep.core.database.entity.user.MockDefinitionQues
 import com.arman.dev.physioexamprep.core.domain.model.MockDefinition
 import com.arman.dev.physioexamprep.core.domain.model.MockType
 import com.arman.dev.physioexamprep.core.domain.model.QuestionSelection
-import com.arman.dev.physioexamprep.core.domain.model.SyncEntityType
-import com.arman.dev.physioexamprep.core.domain.model.SyncOperation
 import com.arman.dev.physioexamprep.core.domain.repository.MockDefinitionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,7 +21,6 @@ class MockDefinitionRepositoryImpl @Inject constructor(
 ) : MockDefinitionRepository {
 
     private val dao = database.mockDefinitionDao()
-    private val outbox = SyncOutboxWriter(database.syncOutboxDao())
 
     override fun observeMockDefinitions(userId: String): Flow<List<MockDefinition>> =
         dao.observeMockDefinitions(userId).map { list -> list.map { it.toDomain() } }
@@ -72,18 +69,11 @@ class MockDefinitionRepositoryImpl @Inject constructor(
                     )
                 }
             )
-            outbox.enqueue(userId, SyncEntityType.MOCK_DEFINITION, id, SyncOperation.INSERT, now)
             id
         }
     }
 
     override suspend fun deleteMockDefinition(id: String) {
-        database.withTransaction<Unit> {
-            val existing = dao.getMockDefinitionEntity(id) ?: return@withTransaction
-            val now = timeProvider.nowMillis()
-            if (dao.softDeleteMockDefinition(id, now) == 1) {
-                outbox.enqueue(existing.userId, SyncEntityType.MOCK_DEFINITION, id, SyncOperation.DELETE, now)
-            }
-        }
+        dao.softDeleteMockDefinition(id, timeProvider.nowMillis())
     }
 }

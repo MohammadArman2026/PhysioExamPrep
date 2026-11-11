@@ -38,7 +38,7 @@ interface MockDefinitionDao {
     )
     fun observeMockDefinitions(userId: String): Flow<List<MockDefinitionEntity>>
 
-    /** Soft delete (keeps the row for sync and for sessions that used it). */
+    /** Soft delete (keeps the row so past sessions still reference it). */
     @Query(
         "UPDATE mock_definitions SET deletedAt = :deletedAt, updatedAt = :deletedAt " +
             "WHERE id = :id AND deletedAt IS NULL"
@@ -46,7 +46,7 @@ interface MockDefinitionDao {
     suspend fun softDeleteMockDefinition(id: String, deletedAt: Long): Int
 
     /**
-     * Permanent delete (e.g. purge after sync). Its questions are cascade-deleted and
+     * Permanent delete. Its questions are cascade-deleted and
      * sessions that used it keep their history with mockDefinitionId set to NULL.
      */
     @Query("DELETE FROM mock_definitions WHERE id = :id")

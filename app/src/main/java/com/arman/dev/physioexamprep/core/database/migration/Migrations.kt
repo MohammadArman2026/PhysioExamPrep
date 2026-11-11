@@ -181,20 +181,6 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             "CREATE UNIQUE INDEX IF NOT EXISTS `index_daily_activity_userId_activityDate` " +
                 "ON `daily_activity` (`userId`, `activityDate`)"
         )
-
-        // sync_outbox
-        db.execSQL(
-            "CREATE TABLE IF NOT EXISTS `sync_outbox` (`id` TEXT NOT NULL, `userId` TEXT NOT NULL, " +
-                "`entityType` TEXT NOT NULL, `entityId` TEXT NOT NULL, `operation` TEXT NOT NULL, " +
-                "`createdAt` INTEGER NOT NULL, `retryCount` INTEGER NOT NULL, PRIMARY KEY(`id`), " +
-                "FOREIGN KEY(`userId`) REFERENCES `user_profiles`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE )"
-        )
-        db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_sync_outbox_userId_createdAt` ON `sync_outbox` (`userId`, `createdAt`)"
-        )
-        db.execSQL(
-            "CREATE INDEX IF NOT EXISTS `index_sync_outbox_entityType_entityId` ON `sync_outbox` (`entityType`, `entityId`)"
-        )
     }
 }
 

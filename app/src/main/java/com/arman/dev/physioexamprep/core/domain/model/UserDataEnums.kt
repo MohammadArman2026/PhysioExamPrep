@@ -25,17 +25,3 @@ enum class SessionType {
 enum class SessionStatus { IN_PROGRESS, COMPLETED, ABANDONED }
 
 enum class AnswerStatus { UNANSWERED, ANSWERED }
-
-enum class SyncOperation { INSERT, UPDATE, DELETE }
-
-/** Which user table a [SyncOperation] in the outbox refers to. */
-enum class SyncEntityType {
-    USER_PROFILE,
-    MOCK_DEFINITION,
-    ASSESSMENT_SESSION,
-    SESSION_RESULT,
-    QUESTION_BOOKMARK,
-    QUESTION_PROGRESS,
-    CHAPTER_PROGRESS,
-    DAILY_ACTIVITY
-}

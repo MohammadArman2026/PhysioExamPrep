@@ -15,7 +15,6 @@ import com.arman.dev.physioexamprep.core.database.dao.user.QuestionProgressDao
 import com.arman.dev.physioexamprep.core.database.dao.user.SessionAnswerDao
 import com.arman.dev.physioexamprep.core.database.dao.user.SessionQuestionDao
 import com.arman.dev.physioexamprep.core.database.dao.user.SessionResultDao
-import com.arman.dev.physioexamprep.core.database.dao.user.SyncOutboxDao
 import com.arman.dev.physioexamprep.core.database.dao.user.UserProfileDao
 import com.arman.dev.physioexamprep.core.database.entity.ChapterEntity
 import com.arman.dev.physioexamprep.core.database.entity.QuestionEntity
@@ -32,7 +31,6 @@ import com.arman.dev.physioexamprep.core.database.entity.user.SessionAnswerEntit
 import com.arman.dev.physioexamprep.core.database.entity.user.SessionAnswerOptionEntity
 import com.arman.dev.physioexamprep.core.database.entity.user.SessionQuestionEntity
 import com.arman.dev.physioexamprep.core.database.entity.user.SessionResultEntity
-import com.arman.dev.physioexamprep.core.database.entity.user.SyncOutboxEntity
 import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
 
 /**
@@ -41,7 +39,7 @@ import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
  * Version history:
  *  1 – content tables: subjects → chapters → questions → question_options.
  *  2 – user tables: profiles, mock definitions, assessment sessions/answers/results,
- *      bookmarks, progress, daily activity, sync outbox (see MIGRATION_1_2).
+ *      bookmarks, progress, daily activity (see MIGRATION_1_2).
  *
  * Schema JSON is exported to app/schemas/ (commit it). For every schema change,
  * bump [version] and add a migration – never use fallbackToDestructiveMigration(),
@@ -66,8 +64,7 @@ import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
         QuestionBookmarkEntity::class,
         QuestionProgressEntity::class,
         ChapterProgressEntity::class,
-        DailyActivityEntity::class,
-        SyncOutboxEntity::class
+        DailyActivityEntity::class
     ],
     version = 2,
     exportSchema = true
@@ -90,7 +87,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun questionProgressDao(): QuestionProgressDao
     abstract fun chapterProgressDao(): ChapterProgressDao
     abstract fun dailyActivityDao(): DailyActivityDao
-    abstract fun syncOutboxDao(): SyncOutboxDao
 
     companion object {
         const val DATABASE_NAME = "physio_exam_prep.db"

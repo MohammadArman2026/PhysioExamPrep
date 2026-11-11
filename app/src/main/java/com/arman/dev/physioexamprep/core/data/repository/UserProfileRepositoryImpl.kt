@@ -5,8 +5,6 @@ import com.arman.dev.physioexamprep.core.common.TimeProvider
 import com.arman.dev.physioexamprep.core.data.mapper.toDomain
 import com.arman.dev.physioexamprep.core.database.AppDatabase
 import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
-import com.arman.dev.physioexamprep.core.domain.model.SyncEntityType
-import com.arman.dev.physioexamprep.core.domain.model.SyncOperation
 import com.arman.dev.physioexamprep.core.domain.model.UserProfile
 import com.arman.dev.physioexamprep.core.domain.repository.UserProfileRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +17,6 @@ class UserProfileRepositoryImpl @Inject constructor(
 ) : UserProfileRepository {
 
     private val dao = database.userProfileDao()
-    private val outbox = SyncOutboxWriter(database.syncOutboxDao())
 
     override fun observeProfile(userId: String): Flow<UserProfile?> =
         dao.observeProfile(userId).map { it?.toDomain() }
@@ -48,10 +45,6 @@ class UserProfileRepositoryImpl @Inject constructor(
                 updatedAt = now
             )
             dao.insertOrUpdateProfile(entity)
-            outbox.enqueue(
-                userId, SyncEntityType.USER_PROFILE, userId,
-                if (existing == null) SyncOperation.INSERT else SyncOperation.UPDATE, now
-            )
             entity.toDomain()
         }
     }

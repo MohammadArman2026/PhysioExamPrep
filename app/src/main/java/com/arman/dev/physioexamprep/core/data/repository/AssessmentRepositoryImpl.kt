@@ -18,8 +18,6 @@ import com.arman.dev.physioexamprep.core.domain.model.QuestionSelection
 import com.arman.dev.physioexamprep.core.domain.model.SessionResult
 import com.arman.dev.physioexamprep.core.domain.model.SessionStatus
 import com.arman.dev.physioexamprep.core.domain.model.SessionType
-import com.arman.dev.physioexamprep.core.domain.model.SyncEntityType
-import com.arman.dev.physioexamprep.core.domain.model.SyncOperation
 import com.arman.dev.physioexamprep.core.domain.repository.AssessmentRepository
 import com.arman.dev.physioexamprep.core.domain.scoring.AssessmentScorer
 import com.arman.dev.physioexamprep.core.domain.scoring.ScoringItem
@@ -37,8 +35,7 @@ class AssessmentRepositoryImpl @Inject constructor(
     private val sessionQuestionDao = database.sessionQuestionDao()
     private val answerDao = database.sessionAnswerDao()
     private val resultDao = database.sessionResultDao()
-    private val outbox = SyncOutboxWriter(database.syncOutboxDao())
-    private val progressRecorder = ProgressRecorder(database, timeProvider, outbox)
+    private val progressRecorder = ProgressRecorder(database, timeProvider)
 
     // ---------------------------------------------------------------- start
 
@@ -96,7 +93,6 @@ class AssessmentRepositoryImpl @Inject constructor(
                     )
                 }
             )
-            outbox.enqueue(userId, SyncEntityType.ASSESSMENT_SESSION, sessionId, SyncOperation.INSERT, now)
             sessionId
         }
     }
@@ -198,7 +194,6 @@ class AssessmentRepositoryImpl @Inject constructor(
             if (session.status != SessionStatus.IN_PROGRESS) return@withTransaction
             val now = timeProvider.nowMillis()
             sessionDao.updateSessionStatus(sessionId, SessionStatus.ABANDONED, now)
-            outbox.enqueue(session.userId, SyncEntityType.ASSESSMENT_SESSION, sessionId, SyncOperation.UPDATE, now)
         }
     }
 
@@ -261,8 +256,6 @@ class AssessmentRepositoryImpl @Inject constructor(
             completedAt = now
         )
         resultDao.insertResult(result)
-        outbox.enqueue(session.userId, SyncEntityType.ASSESSMENT_SESSION, sessionId, SyncOperation.UPDATE, now)
-        outbox.enqueue(session.userId, SyncEntityType.SESSION_RESULT, sessionId, SyncOperation.INSERT, now)
         result.toDomain()
     }
 

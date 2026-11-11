@@ -18,8 +18,6 @@ import com.arman.dev.physioexamprep.core.domain.model.AnswerStatus
 import com.arman.dev.physioexamprep.core.domain.model.QuestionSelection
 import com.arman.dev.physioexamprep.core.domain.model.SessionStatus
 import com.arman.dev.physioexamprep.core.domain.model.SessionType
-import com.arman.dev.physioexamprep.core.domain.model.SyncEntityType
-import com.arman.dev.physioexamprep.core.domain.model.SyncOperation
 import com.arman.dev.physioexamprep.core.domain.usecase.CompleteAssessmentUseCase
 import com.arman.dev.physioexamprep.core.domain.usecase.CreateCustomMockUseCase
 import com.arman.dev.physioexamprep.core.domain.usecase.SaveAnswerUseCase
@@ -103,9 +101,6 @@ class UserDataRepositoryTest {
         assertEquals(40, updated.dailyQuestionGoal)
         assertEquals(created.createdAt, updated.createdAt)
         assertTrue(updated.updatedAt > created.updatedAt)
-        // INSERT is queued; the follow-up UPDATE is coalesced into it.
-        val outbox = db.syncOutboxDao().getPendingOperations(USER, 10)
-        assertEquals(listOf(SyncOperation.INSERT), outbox.map { it.operation })
     }
 
     // ------------------------------------------------------------- mock definitions
@@ -258,10 +253,6 @@ class UserDataRepositoryTest {
 
         // Completed sessions are read-only.
         expectFailure<IllegalStateException> { saveAnswer(sessionQuestionId(sessionId, Content.Q_OTHER), setOf(Content.Q_OTHER_A)) }
-
-        // Sync outbox has the session and result.
-        val types = db.syncOutboxDao().getPendingOperations(USER, 100).map { it.entityType }.toSet()
-        assertTrue(types.containsAll(setOf(SyncEntityType.ASSESSMENT_SESSION, SyncEntityType.SESSION_RESULT)))
     }
 
     @Test
@@ -374,9 +365,5 @@ class UserDataRepositoryTest {
         bookmarks.addBookmark(USER, Content.Q_MULTI) // restores the same row
         assertEquals(rowId, db.questionBookmarkDao().getBookmark(USER, Content.Q_MULTI)!!.id)
         assertEquals(listOf(Content.Q_MULTI), db.questionBookmarkDao().observeBookmarkedQuestions(USER).first().map { it.id })
-
-        val ops = db.syncOutboxDao().getPendingOperations(USER, 100)
-            .filter { it.entityType == SyncEntityType.QUESTION_BOOKMARK }.map { it.operation }
-        assertEquals(listOf(SyncOperation.INSERT, SyncOperation.DELETE, SyncOperation.UPDATE), ops)
     }
 }
