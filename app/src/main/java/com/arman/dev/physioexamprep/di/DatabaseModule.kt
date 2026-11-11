@@ -7,7 +7,6 @@ import com.arman.dev.physioexamprep.core.database.dao.ChapterDao
 import com.arman.dev.physioexamprep.core.database.dao.QuestionDao
 import com.arman.dev.physioexamprep.core.database.dao.QuestionOptionDao
 import com.arman.dev.physioexamprep.core.database.dao.SubjectDao
-import com.arman.dev.physioexamprep.core.database.migration.ALL_MIGRATIONS
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +22,8 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DATABASE_NAME)
-            // Explicit migrations only – no destructive fallback (user progress lives here).
-            .addMigrations(*ALL_MIGRATIONS)
+            // Seed content (subjects/chapters/questions) from the prebuilt DB on first install.
+            .createFromAsset(AppDatabase.DATABASE_NAME)
             .build()
 
     @Provides

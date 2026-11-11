@@ -37,9 +37,9 @@ import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
  * Single Room database for the app (content + user data).
  *
  * Version history:
- *  1 – content tables: subjects → chapters → questions → question_options.
- *  2 – user tables: profiles, mock definitions, assessment sessions/answers/results,
- *      bookmarks, progress, daily activity (see MIGRATION_1_2).
+ *  1 – initial schema: content tables (subjects → chapters → questions → question_options)
+ *      and user tables (profiles, mock definitions, assessment sessions/answers/results,
+ *      bookmarks, progress, daily activity). Shipped pre-populated via assets/physio_exam_prep.db.
  *
  * Schema JSON is exported to app/schemas/ (commit it). For every schema change,
  * bump [version] and add a migration – never use fallbackToDestructiveMigration(),
@@ -66,7 +66,7 @@ import com.arman.dev.physioexamprep.core.database.entity.user.UserProfileEntity
         ChapterProgressEntity::class,
         DailyActivityEntity::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
