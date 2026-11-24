@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exported from Figma "PhysioPrep — Fresh Concept" (icon/flame). Stroke is black: tint it in Compose with Icon(tint = ...). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="18dp"
+    android:viewportWidth="18"
+    android:viewportHeight="18">
+    <path
+        android:pathData="M6.375 10.875C6.872 10.875 7.349 10.678 7.701 10.326C8.052 9.974 8.25 9.497 8.25 9C8.25 7.965 7.875 7.5 7.5 6.75C6.696 5.143 7.332 3.71 9 2.25C9.375 4.125 10.5 5.925 12 7.125C13.5 8.325 14.25 9.75 14.25 11.25C14.25 11.939 14.114 12.622 13.85 13.259C13.587 13.896 13.2 14.475 12.712 14.962C12.225 15.45 11.646 15.837 11.009 16.1C10.372 16.364 9.689 16.5 9 16.5C8.311 16.5 7.628 16.364 6.991 16.1C6.354 15.837 5.775 15.45 5.288 14.962C4.8 14.475 4.413 13.896 4.15 13.259C3.886 12.622 3.75 11.939 3.75 11.25C3.75 10.385 4.075 9.53 4.5 9C4.5 9.497 4.698 9.974 5.049 10.326C5.401 10.678 5.878 10.875 6.375 10.875Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#FF000000"
+        android:strokeWidth="2.2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

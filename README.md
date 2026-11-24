@@ -1,3 +1,14 @@
+# PhysioExamPrep
+
+> **Current implementation (start here in a new session):**
+> UI is built from the Figma file *PhysioPrep — Fresh Concept* with **MVI** (State · Intent · Effect).
+> - Feature index + conventions: `app/src/main/java/com/arman/dev/physioexamprep/feature/README.md`
+> - MVI base, shared components, navigation: `app/src/main/java/com/arman/dev/physioexamprep/core/mvi/README.md`
+> - Each feature folder has its own `README.md` with its Figma node, state/intents/effects, data source and open questions.
+> - All feature repositories are in-memory fakes bound in `feature/<name>/di/`; the Room layer in `core/` is not wired to screens yet.
+
+---
+
 # 🟢 Future-Proof Package Structure for the Exam Preparation App
 
 > A scalable and clean architecture for a Kotlin + Jetpack Compose exam preparation app.
